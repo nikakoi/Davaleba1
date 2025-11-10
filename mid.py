@@ -23,16 +23,25 @@ embeddings = getEmbeddings()
 vectorStore = FAISS.from_documents(chunks, embeddings)
 similar = vectorStore.as_retriever()
 
-
 llm = Ollama(model="llama3.1:8b")
 
 
 prompt = ChatPromptTemplate.from_template(
-    """Answer the question based only on the information from the document.
-
-    Question: {question}
-    Context: {context}
     """
+You are an assistant that answers questions ONLY using the provided context.
+
+Rules:
+- If the answer is not in the context, reply exactly: "I don't know."
+- Answer ONLY in English.
+
+Context:
+{context}
+
+Question:
+{question}
+
+Answer:
+"""
 )
 
 chain = (
